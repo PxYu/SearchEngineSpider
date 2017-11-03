@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'SearchEngineSpider.spiders'
 
 ITEM_PIPELINES = {'SearchEngineSpider.pipelines.SespiderPipeline': 1}
 
-USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36"
+# USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36"
 
 DEPTH_LIMIT = 0
 
@@ -25,6 +25,17 @@ MYSQL_DBNAME='IR'
 MYSQL_USER='puxuan'
 MYSQL_PASSWD='astro611'
 
+TOP_N=5
+
+# rondom user agent configurations
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+}
+
+RANDOM_UA_TYPE="random"
+FAKEUSERAGENT_FALLBACK="Mozilla"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

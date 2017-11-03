@@ -12,7 +12,6 @@ sys.setdefaultencoding('utf-8')
 
 class SespiderPipeline(object):
     def __init__(self):
-        self.file = open('urls.txt', 'wb')
         self.connect = pymysql.connect(host=settings.MYSQL_HOST,
                                          user=settings.MYSQL_USER,
                                          password=settings.MYSQL_PASSWD,
@@ -22,8 +21,6 @@ class SespiderPipeline(object):
         self.cursor = self.connect.cursor()
 
     def process_item(self, item, spider):
-        # self.file.write(item['title'][0] + ', ' + item['url'][0] + ', ' + "".join(item['snippet']) + '\n')
-        # self.file.write(item['query'] + item['title'][0] + '\n')
         try:
             sql = "INSERT INTO DOCUMENTS (idx, query, title, url, snippet) VALUES (%s, %s, %s, %s, %s)"
             params = [item['idx'], 

@@ -1,4 +1,4 @@
-__author__ = 'Puxuan'
+__author__ = 'pxyuwhu'
 
 from scrapy.spiders import Spider
 from SearchEngineSpider.common.searchEngines import SearchEngineResultSelectors
@@ -7,17 +7,18 @@ from scrapy.selector import  Selector
 import urlparse
 import os
 import urllib
+from .. import settings
 
 class keywordSpider(Spider):
     name = 'keywordSpider'
-    allowed_domains = ['bing.com','google.com','baidu.com', 'google.ca']
+    allowed_domains = ['google.com', 'google.ca', 'google.jp', 'google.com.hk']
     start_urls = []
     script_dir = os.path.dirname(__file__)
     searchEngine = None
     searchEngineUrl = None
     selector = None
-
-
+    max_limit = settings.TOP_N
+    
     def __init__(self, keyword_file, se = 'google', *args, **kwargs):
         super(keywordSpider, self).__init__(*args, **kwargs)
         self.searchEngine = se.lower()
@@ -31,9 +32,10 @@ class keywordSpider(Spider):
 
     def parse(self, response):
         items = Selector(response).xpath(self.selector)
-        for index, item in enumerate(items):
+        length = len(items)
+        for index, item in enumerate(items[0: min(length, self.max_limit)]):
             yield {
-                    "idx": index,
+                    "idx": index + 1,
                     "title": item.xpath('normalize-space(string(h3/a))').extract()[0],
                     "url": item.xpath('h3/a/@href').extract()[0],
                     "snippet": "".join(item.xpath('div[@class="s"]/div/span[@class="st"]//text()[not(parent::span[@class="f"]) and normalize-space()]').extract()),
